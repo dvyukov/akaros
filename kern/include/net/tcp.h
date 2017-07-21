@@ -29,6 +29,7 @@
 #pragma once
 
 #include <net/ip.h>
+#include <net/tcp_ca.h>
 
 enum {
 	QMAX = 64 * 1024 - 1,
@@ -286,6 +287,7 @@ struct tcpctl {
 	uint32_t ts_recent;			/* timestamp received around last_ack_sent */
 	uint32_t last_ack_sent;		/* to determine when to update timestamp */
 	bool sack_ok;				/* Can use SACK for this connection */
+	uint64_t tcp_ca_priv[TCP_CA_PRIV_SIZE / sizeof(uint64_t)];
 
 	union {
 		Tcp4hdr tcp4hdr;
@@ -408,4 +410,14 @@ static inline uint32_t seq_max(uint32_t x, uint32_t y)
 static inline uint32_t seq_min(uint32_t x, uint32_t y)
 {
 	return seq_le(x, y) ? x : y;
+}
+
+static struct tcpctl *conv_to_tcpctl(struct conv *s)
+{
+	return (struct tcpctl*)s->ptcl;
+}
+
+static void *conv_to_tcp_ca(struct conv *s)
+{
+	return conv_to_tcpctl(s)->tcp_ca_priv;
 }
