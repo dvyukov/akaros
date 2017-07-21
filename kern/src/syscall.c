@@ -424,6 +424,7 @@ void set_errno(int errno)
 
 /* Callable by any function while executing a syscall (or otherwise, actually).
  */
+// XXX these are fucked - anything touching user memory
 int get_errno(void)
 {
 	/* if there's no errno to get, that's not an error I guess. */
