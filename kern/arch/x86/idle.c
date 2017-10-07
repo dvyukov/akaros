@@ -36,6 +36,8 @@ void set_pstate(unsigned int pstate)
 	perf_ctl &= ~0xff00ULL;
 	perf_ctl |= pstate << 8;
 	write_msr_safe(MSR_IA32_PERF_CTL, perf_ctl);
+
+	// XXX ensure IDA/turbo disengange (bit 32) is off?
 }
 
 void set_fastest_pstate(void)
